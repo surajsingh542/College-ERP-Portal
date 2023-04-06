@@ -4,11 +4,14 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import AuthContextProvider from "./components/context/AuthContext/AuthContext";
+import { AdminContextProvider } from "./components/context/AdminContext/AdminContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <AuthContextProvider>
-    <App />
+    <AdminContextProvider>
+      <App />
+    </AdminContextProvider>
   </AuthContextProvider>
 );
 

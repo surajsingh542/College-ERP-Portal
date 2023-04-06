@@ -9,8 +9,6 @@ const Profile = () => {
   useEffect(() => {
     fetchAdminProfileAction();
   }, []);
-  console.log(profile);
-  console.log(error);
   return (
     <section className="w-12/12 mx-auto flex mt-12 flex-col md:flex-row">
       {error ? (
@@ -19,8 +17,8 @@ const Profile = () => {
             className="bg-red-100 border text-center border-red-400 text-red-700 px-4 py-3 rounded relative"
             role="alert"
           >
-            <strong className="font-bold">Error!</strong>
-            <span className="block sm:inline ">Error here</span>
+            <strong className="font-bold">Error!</strong> {""}
+            <span className="block sm:inline ">{error}</span>
           </div>
         </>
       ) : (

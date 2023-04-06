@@ -89,13 +89,29 @@ const addFacultyCtrl = async (req, res, next) => {
       email,
       contactNumber,
       password,
-      profileImage,
+      subjectsAssigned,
       dob,
       registrationNumber,
       gender,
       designation,
       department,
     } = req.body;
+
+    if (
+      fullname == "" ||
+      email == "" ||
+      contactNumber == "" ||
+      password == "" ||
+      subjectsAssigned == "" ||
+      dob == "" ||
+      registrationNumber == "" ||
+      gender == "" ||
+      designation == "" ||
+      department == ""
+    ) {
+      return next(new AppErr("All fields are compulsory", 400));
+    }
+
     // check if faculty already exist
     const facultyFound = await Faculty.findOne({ email });
     if (facultyFound) {
@@ -112,7 +128,7 @@ const addFacultyCtrl = async (req, res, next) => {
       email,
       contactNumber,
       password: hashedPassword,
-      profileImage,
+      subjectsAssigned,
       dob,
       registrationNumber,
       gender,
@@ -297,8 +313,7 @@ const getStudentsCtrl = async (req, res) => {
 // get subjects
 const getSubjectsCtrl = async (req, res) => {
   try {
-    const { department } = req.body;
-    const subjects = await Subject.find({ department });
+    const subjects = await Subject.find();
     res.json({
       status: "success",
       data: subjects,

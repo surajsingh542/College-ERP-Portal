@@ -31,7 +31,8 @@ const reducer = (state, action) => {
         error: null,
       };
     case LOGIN_FAILED:
-      console.log(payload);
+      // remove from storage
+      localStorage.removeItem("userAuth");
       return {
         ...state,
         loading: false,
@@ -80,6 +81,8 @@ const AuthContextProvider = ({ children }) => {
           type: LOGIN_SUCCESS,
           payload: res.data,
         });
+        // redirect
+        window.location.href = "/profile";
       }
     } catch (error) {
       dispatch({

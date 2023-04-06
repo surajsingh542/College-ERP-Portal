@@ -46,8 +46,10 @@ const facultySchema = new mongoose.Schema(
     },
     subjectsAssigned: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Subject",
+        value: { type: mongoose.Schema.Types.ObjectId, ref: "Subject" },
+        label: {
+          type: String,
+        },
       },
     ],
   },
