@@ -15,7 +15,7 @@ const addAdminCtrl = async (req, res, next) => {
       password,
       gender,
       registrationNumber,
-      profileImage,
+      department,
       dob,
     } = req.body;
     // check if email already exist
@@ -35,7 +35,7 @@ const addAdminCtrl = async (req, res, next) => {
       password: hashedPassword,
       gender,
       registrationNumber,
-      profileImage,
+      department,
       dob,
     });
 
@@ -118,6 +118,11 @@ const addFacultyCtrl = async (req, res, next) => {
       return next(new AppErr("Faculty already exist.", 400));
     }
 
+    // check if numeric fields are number
+    if (!Number.isNaN(contactNumber) || !Number.isNaN(registrationNumber)) {
+      return next(new AppErr("Please enter valid Numeric Field.", 400));
+    }
+
     // hash the password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -155,7 +160,6 @@ const addStudentCtrl = async (req, res, next) => {
       email,
       contactNumber,
       password,
-      profileImage,
       dob,
       registrationNumber,
       gender,
@@ -165,10 +169,39 @@ const addStudentCtrl = async (req, res, next) => {
       aadharCard,
       batch,
     } = req.body;
+
+    if (
+      fullname == "" ||
+      email == "" ||
+      contactNumber == "" ||
+      password == "" ||
+      dob == "" ||
+      registrationNumber == "" ||
+      gender == "" ||
+      year == "" ||
+      department == "" ||
+      fatherName == "" ||
+      aadharCard == "" ||
+      batch == ""
+    ) {
+      return next(new AppErr("All fields are compulsory", 400));
+    }
+
     // check if student already exist
     const studentFound = await Student.findOne({ registrationNumber });
     if (studentFound) {
       return next(new AppErr("Student already exist.", 400));
+    }
+
+    // check if numeric fields are number
+    if (
+      !Number.isNaN(contactNumber) ||
+      !Number.isNaN(registrationNumber) ||
+      !Number.isNaN(aadharCard) ||
+      !Number.isNaN(year) ||
+      !Number.isNaN(batch)
+    ) {
+      return next(new AppErr("Please enter valid Numeric Field.", 400));
     }
 
     // hash the password
@@ -181,7 +214,6 @@ const addStudentCtrl = async (req, res, next) => {
       email,
       contactNumber,
       password: hashedPassword,
-      profileImage,
       dob,
       registrationNumber,
       gender,
@@ -285,8 +317,7 @@ const updatePasswordCtrl = async (req, res) => {
 // get faculty
 const getFacultiesCtrl = async (req, res) => {
   try {
-    const { department } = req.body;
-    const faculties = await Faculty.find({ department });
+    const faculties = await Faculty.find();
     res.json({
       status: "success",
       data: faculties,

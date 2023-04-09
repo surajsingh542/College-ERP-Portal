@@ -1,71 +1,48 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { adminContext } from "../context/AdminContext/AdminContext";
-import Select from "react-select";
 
-const AddFaculty = () => {
-  const { addFacultyAction, fetchSubjectAction, error, subjects } =
-    useContext(adminContext);
+const AddStudent = () => {
+  const { addStudentAction, error } = useContext(adminContext);
 
   const [formData, setFormData] = useState({
     fullname: "",
     email: "",
     contactNumber: "",
     password: "",
+    dob: "",
     registrationNumber: "",
     gender: "",
-    designation: "",
+    year: "",
     department: "",
-    subjectsAssigned: "",
-    dob: "",
+    fatherName: "",
+    aadharCard: "",
+    batch: "",
   });
 
   const onChangeHandler = (e) => {
-    console.log(e.target.options);
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const multiSelectHandler = (data) => {
-    setFormData({
-      ...formData,
-      subjectsAssigned: data,
-    });
-  };
-
-  useEffect(() => {
-    fetchSubjectAction();
-  }, [formData?.department]);
-
-  const filteredSubjects = subjects.filter((subject) => {
-    console.log(formData);
-    return subject?.department === formData?.department;
-  });
-
-  const subjectOptions = [];
-  filteredSubjects.forEach((sub) => {
-    const obj = {
-      value: sub._id,
-      label: sub.subjectName,
-    };
-    subjectOptions.push(obj);
-  });
-
   const submitHandler = (e) => {
     e.preventDefault();
-    addFacultyAction(formData);
+    addStudentAction(formData);
+
     setFormData({
       fullname: "",
       email: "",
       contactNumber: "",
       password: "",
+      dob: "",
       registrationNumber: "",
       gender: "",
-      designation: "",
+      year: "",
       department: "",
-      subjectsAssigned: "",
-      dob: "",
+      fatherName: "",
+      aadharCard: "",
+      batch: "",
     });
   };
 
@@ -87,7 +64,7 @@ const AddFaculty = () => {
           <form action="" onSubmit={submitHandler}>
             <div className="grid gap-4 max-w-md mt-8 px-8 mx-auto grid-cols-1 md:grid-cols-2 md:max-w-5xl ">
               <div>
-                <label for="fullname">Fullname</label>
+                <label for="fullname">Student Name</label>
                 <input
                   required={true}
                   type="text"
@@ -114,6 +91,8 @@ const AddFaculty = () => {
                   required={true}
                   type="text"
                   inputMode="numeric"
+                  minLength={10}
+                  maxLength={10}
                   name="contactNumber"
                   onChange={onChangeHandler}
                   value={formData.contactNumber}
@@ -131,6 +110,19 @@ const AddFaculty = () => {
                   className="appearance-none block w-full p-2 my-3 leading-3 text-coolGray-900 border border-coolGray-200 rounded-md  placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
                 />
               </div>
+
+              <div>
+                <label for="dob">Date of Birth</label>
+                <input
+                  required={true}
+                  type="date"
+                  name="dob"
+                  onChange={onChangeHandler}
+                  value={formData.dob}
+                  className="appearance-none block w-full p-2 my-3 leading-3 text-coolGray-900 border border-coolGray-200 rounded-md  placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                />
+              </div>
+
               <div>
                 <label for="registrationNumber">Registration Number</label>
                 <input
@@ -143,6 +135,7 @@ const AddFaculty = () => {
                   className="appearance-none block w-full p-2 my-3 leading-3 text-coolGray-900 border border-coolGray-200 rounded-md  placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
                 />
               </div>
+
               <div>
                 <label htmlFor="gender">Gender</label>
                 <select
@@ -161,17 +154,22 @@ const AddFaculty = () => {
                   <option value="Other">Other</option>
                 </select>
               </div>
+
               <div>
-                <label for="designation">Designation</label>
+                <label htmlFor="year">Current Academic Year</label>
                 <input
                   required={true}
-                  type="text"
-                  name="designation"
+                  type="number"
+                  min={1}
+                  max={5}
+                  name="year"
+                  id="year"
                   onChange={onChangeHandler}
-                  value={formData.designation}
+                  value={formData.year}
                   className="appearance-none block w-full p-2 my-3 leading-3 text-coolGray-900 border border-coolGray-200 rounded-md  placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
                 />
               </div>
+
               <div>
                 <label htmlFor="department">Department</label>
                 <select
@@ -202,56 +200,51 @@ const AddFaculty = () => {
               </div>
 
               <div>
-                <label for="subjectsAssigned">Subjects Assigned</label>
-
-                <Select
-                  styles={{
-                    control: (baseStyles, state) => ({
-                      ...baseStyles,
-                      border: "0",
-                      boxShadow: "0",
-                      outline: "none",
-                      "&:hover": {
-                        border: "0",
-                        outline: "none",
-                      },
-                    }),
-                  }}
-                  classNames={{
-                    control: (state) =>
-                      state.isFocused
-                        ? "outline-none ring-2 ring-green-500 ring-opacity-50"
-                        : "",
-                  }}
+                <label for="fatherName">Father Name</label>
+                <input
                   required={true}
-                  options={subjectOptions}
-                  placeholder="Select Subjects assigned to Faculty"
-                  isMulti
-                  isSearchable={true}
-                  name="subjectsAssigned"
-                  id="subjectsAssigned"
-                  onChange={multiSelectHandler}
-                  value={formData.subjectsAssigned}
-                  className="block w-full  my-3 leading-3 text-coolGray-900 border border-coolGray-200 rounded-md  placeholder-coolGray-400 "
+                  type="text"
+                  name="fatherName"
+                  onChange={onChangeHandler}
+                  value={formData.fatherName}
+                  className="appearance-none block w-full p-2 my-3 leading-3 text-coolGray-900 border border-coolGray-200 rounded-md  placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
                 />
               </div>
 
               <div>
-                <label for="dob">Date of Birth</label>
+                <label for="aadharCard">Aadhar Card Number</label>
                 <input
                   required={true}
-                  type="date"
-                  name="dob"
+                  type="text"
+                  inputMode="numeric"
+                  minLength={16}
+                  maxLength={16}
+                  name="aadharCard"
                   onChange={onChangeHandler}
-                  value={formData.dob}
+                  value={formData.aadharCard}
                   className="appearance-none block w-full p-2 my-3 leading-3 text-coolGray-900 border border-coolGray-200 rounded-md  placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
                 />
               </div>
+
+              <div>
+                <label for="batch">Batch Year</label>
+                <input
+                  required={true}
+                  type="number"
+                  name="batch"
+                  min={2017}
+                  max={new Date().getFullYear()}
+                  onChange={onChangeHandler}
+                  value={formData.batch}
+                  className="appearance-none block w-full p-2 my-3 leading-3 text-coolGray-900 border border-coolGray-200 rounded-md  placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                />
+              </div>
+
               <button
                 className="inline-block py-3 my-3 px-7 w-9/12 text-base text-green-50 font-medium text-center leading-6 bg-cyan-500 hover:bg-cyan-600 focus:ring-2  rounded-md shadow-sm"
                 type="submit"
               >
-                Add Faculty
+                Add Student
               </button>
             </div>
           </form>
@@ -261,4 +254,4 @@ const AddFaculty = () => {
   );
 };
 
-export default AddFaculty;
+export default AddStudent;

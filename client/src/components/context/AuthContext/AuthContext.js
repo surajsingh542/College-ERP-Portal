@@ -82,7 +82,7 @@ const AuthContextProvider = ({ children }) => {
           payload: res.data,
         });
         // redirect
-        window.location.href = "/profile";
+        window.location.href = "/admin-profile";
       }
     } catch (error) {
       dispatch({

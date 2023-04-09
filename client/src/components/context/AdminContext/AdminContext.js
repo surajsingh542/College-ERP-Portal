@@ -3,7 +3,12 @@ import axios from "axios";
 import { authContext } from "../AuthContext/AuthContext";
 import { API_URL_ADMIN } from "../../../utils/apiURL";
 import {
+  ADD_ADMIN_FAIL,
   ADD_FACULTY_FAIL,
+  ADD_STUDENT_FAIL,
+  ADD_SUBJECT_FAIL,
+  FETCH_FACULTY_FAIL,
+  FETCH_FACULTY_SUCCESS,
   FETCH_SUBJECT_FAIL,
   FETCH_SUBJECT_SUCCESS,
 } from "./adminActionTypes";
@@ -29,6 +34,30 @@ const reducer = (state, action) => {
         students: [],
         subjects: [],
       };
+    case ADD_ADMIN_FAIL:
+      return {
+        ...state,
+        error: payload,
+        faculties: [],
+        students: [],
+        subjects: [],
+      };
+    case ADD_STUDENT_FAIL:
+      return {
+        ...state,
+        error: payload,
+        faculties: [],
+        students: [],
+        subjects: [],
+      };
+    case ADD_SUBJECT_FAIL:
+      return {
+        ...state,
+        error: payload,
+        faculties: [],
+        students: [],
+        subjects: [],
+      };
     case FETCH_SUBJECT_FAIL:
       return {
         ...state,
@@ -44,6 +73,22 @@ const reducer = (state, action) => {
         faculties: [],
         students: [],
         subjects: payload,
+      };
+    case FETCH_FACULTY_SUCCESS:
+      return {
+        ...state,
+        error: null,
+        faculties: payload,
+        students: [],
+        subjects: [],
+      };
+    case FETCH_FACULTY_FAIL:
+      return {
+        ...state,
+        error: payload,
+        faculties: [],
+        students: [],
+        subjects: [],
       };
     default:
       return state;
@@ -87,6 +132,98 @@ export const AdminContextProvider = ({ children }) => {
     }
   };
 
+  //   addAdmin
+  const addAdminAction = async (formData) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userAuth?.userAuth?.token}`,
+      },
+    };
+    try {
+      const res = await axios.post(`${API_URL_ADMIN}`, formData, config);
+      console.log(res);
+
+      if (res?.data?.status === "success") {
+        const msgStatus = document.querySelector(".msg__status");
+        msgStatus.innerHTML = "Faculty has been added successfully.";
+        msgStatus.style.display = "block";
+        setTimeout(() => {
+          msgStatus.style.display = "none";
+        }, 10000);
+      }
+    } catch (error) {
+      dispatch({
+        type: ADD_ADMIN_FAIL,
+        payload: error?.response?.data?.message,
+      });
+    }
+  };
+
+  //   addStudent
+  const addStudentAction = async (formData) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userAuth?.userAuth?.token}`,
+      },
+    };
+    try {
+      const res = await axios.post(
+        `${API_URL_ADMIN}/student`,
+        formData,
+        config
+      );
+      console.log(res);
+
+      if (res?.data?.status === "success") {
+        const msgStatus = document.querySelector(".msg__status");
+        msgStatus.innerHTML = "Student has been added successfully.";
+        msgStatus.style.display = "block";
+        setTimeout(() => {
+          msgStatus.style.display = "none";
+        }, 10000);
+      }
+    } catch (error) {
+      dispatch({
+        type: ADD_STUDENT_FAIL,
+        payload: error?.response?.data?.message,
+      });
+    }
+  };
+
+  //   addSubject
+  const addSubjectAction = async (formData) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userAuth?.userAuth?.token}`,
+      },
+    };
+    try {
+      const res = await axios.post(
+        `${API_URL_ADMIN}/subject`,
+        formData,
+        config
+      );
+      console.log(res);
+
+      if (res?.data?.status === "success") {
+        const msgStatus = document.querySelector(".msg__status");
+        msgStatus.innerHTML = "Subject has been added successfully.";
+        msgStatus.style.display = "block";
+        setTimeout(() => {
+          msgStatus.style.display = "none";
+        }, 10000);
+      }
+    } catch (error) {
+      dispatch({
+        type: ADD_SUBJECT_FAIL,
+        payload: error?.response?.data?.message,
+      });
+    }
+  };
+
   //   get subjects
   const fetchSubjectAction = async () => {
     const config = {
@@ -113,11 +250,41 @@ export const AdminContextProvider = ({ children }) => {
     }
   };
 
+  //   get faculties
+  const fetchFacultiesAction = async () => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userAuth?.userAuth?.token}`,
+      },
+    };
+    try {
+      const res = await axios.get(`${API_URL_ADMIN}/faculties`, config);
+      console.log(res);
+      console.log(config.headers.Authorization);
+      if (res?.data?.status === "success") {
+        dispatch({
+          type: FETCH_FACULTY_SUCCESS,
+          payload: res?.data?.data,
+        });
+      }
+    } catch (error) {
+      dispatch({
+        type: FETCH_FACULTY_FAIL,
+        payload: error?.response?.data?.message,
+      });
+    }
+  };
+
   return (
     <adminContext.Provider
       value={{
         addFacultyAction,
+        addStudentAction,
+        addSubjectAction,
+        addAdminAction,
         fetchSubjectAction,
+        fetchFacultiesAction,
         subjects: state?.subjects,
         error: state?.error,
       }}
