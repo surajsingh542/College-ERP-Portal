@@ -35,16 +35,16 @@ const AddFaculty = () => {
   };
 
   useEffect(() => {
-    fetchSubjectAction();
+    fetchSubjectAction(formData?.department);
   }, [formData?.department]);
 
-  const filteredSubjects = subjects.filter((subject) => {
-    console.log(formData);
-    return subject?.department === formData?.department;
-  });
+  // const filteredSubjects = subjects.filter((subject) => {
+  //   console.log(formData);
+  //   return subject?.department === formData?.department;
+  // });
 
   const subjectOptions = [];
-  filteredSubjects.forEach((sub) => {
+  subjects.forEach((sub) => {
     const obj = {
       value: sub._id,
       label: sub.subjectName,

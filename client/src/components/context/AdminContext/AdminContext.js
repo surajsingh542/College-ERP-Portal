@@ -225,7 +225,7 @@ export const AdminContextProvider = ({ children }) => {
   };
 
   //   get subjects
-  const fetchSubjectAction = async () => {
+  const fetchSubjectAction = async (dept) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -237,9 +237,13 @@ export const AdminContextProvider = ({ children }) => {
       console.log(res);
       console.log(config.headers.Authorization);
       if (res?.data?.status === "success") {
+        const filteredSubjects = res?.data?.data.filter((subject) => {
+          return subject?.department === dept;
+        });
+
         dispatch({
           type: FETCH_SUBJECT_SUCCESS,
-          payload: res?.data?.data,
+          payload: filteredSubjects,
         });
       }
     } catch (error) {
@@ -251,7 +255,7 @@ export const AdminContextProvider = ({ children }) => {
   };
 
   //   get faculties
-  const fetchFacultiesAction = async () => {
+  const fetchFacultiesAction = async (formData) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -260,13 +264,27 @@ export const AdminContextProvider = ({ children }) => {
     };
     try {
       const res = await axios.get(`${API_URL_ADMIN}/faculties`, config);
-      console.log(res);
+      console.log("Response", res);
       console.log(config.headers.Authorization);
       if (res?.data?.status === "success") {
+        const deptFaculties = res?.data?.data.filter((faculty) => {
+          return faculty?.department === formData?.department;
+        });
         dispatch({
           type: FETCH_FACULTY_SUCCESS,
-          payload: res?.data?.data,
+          payload: deptFaculties,
         });
+
+        const msgStatus = document.querySelector(".msg__status");
+        const facultyData = document.querySelector(".facultyData");
+        if (deptFaculties.length <= 0) {
+          msgStatus.innerHTML = "No Faculty Found for this Department";
+          msgStatus.style.display = "block";
+          facultyData.style.display = "none";
+        } else {
+          msgStatus.style.display = "none";
+          facultyData.style.display = "block";
+        }
       }
     } catch (error) {
       dispatch({
@@ -287,6 +305,7 @@ export const AdminContextProvider = ({ children }) => {
         fetchFacultiesAction,
         subjects: state?.subjects,
         error: state?.error,
+        faculties: state?.faculties,
       }}
     >
       {children}
