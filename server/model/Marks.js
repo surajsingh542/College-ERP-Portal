@@ -21,7 +21,7 @@ const markSchema = new Schema({
   department: {
     type: String,
   },
-  year: {
+  semester: {
     type: Number,
   },
   uploadedBy: {

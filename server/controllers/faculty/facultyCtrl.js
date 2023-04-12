@@ -144,7 +144,7 @@ const uploadMarksCtrl = async (req, res, next) => {
       marksObtained,
       totalMarks,
       department,
-      year,
+      semester,
     } = req.body;
     const facultyFound = await Faculty.findById(req.user);
     if (!facultyFound) {
@@ -167,7 +167,7 @@ const uploadMarksCtrl = async (req, res, next) => {
       marksObtained,
       totalMarks,
       department,
-      year,
+      semester,
       uploadedBy: req.user,
     });
 

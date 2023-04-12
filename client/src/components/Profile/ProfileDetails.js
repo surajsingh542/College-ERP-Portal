@@ -14,7 +14,7 @@ const ProfileDetails = ({ profile }) => {
               ? profile.profileImage.profile_img
               : defaultProfileImage
           }
-          alt="Profile-Image"
+          alt="User Profile Pic"
         />
         <div className="mt-6 mb-2 text-center font-bold">
           {profile?.fullname}
@@ -26,36 +26,38 @@ const ProfileDetails = ({ profile }) => {
 
       <div className="overflow-hidden border shadow sm:rounded-lg font-semibold border-coolGray-200 mx-auto mb-7 w-10/12 min-w-fit md:w-4/12 md:max-w-md md:ml-0">
         <dl>
-          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Full name</dt>
-            <dd class="mt-1 capitalize text-sm text-gray-900  sm:mt-0">
+          <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium text-gray-500">Full name</dt>
+            <dd className="mt-1 capitalize text-sm text-gray-900  sm:mt-0">
               {profile?.fullname}
             </dd>
           </div>
 
-          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Email address</dt>
-            <dd class="mt-1 lowercase text-sm text-gray-900  sm:mt-0">
+          <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium text-gray-500">Email address</dt>
+            <dd className="mt-1 lowercase text-sm text-gray-900  sm:mt-0">
               {profile?.email}
             </dd>
           </div>
-          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">
+          <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium text-gray-500">
               Registration Number
             </dt>
-            <dd class="mt-1 text-sm text-gray-900  sm:mt-0">
+            <dd className="mt-1 text-sm text-gray-900  sm:mt-0">
               {profile?.registrationNumber}
             </dd>
           </div>
-          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Contact Number</dt>
-            <dd class="mt-1 text-sm text-gray-900  sm:mt-0">
+          <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium text-gray-500">
+              Contact Number
+            </dt>
+            <dd className="mt-1 text-sm text-gray-900  sm:mt-0">
               {profile?.contactNumber}
             </dd>
           </div>
-          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Gender</dt>
-            <dd class="mt-1 capitalize text-sm text-gray-900  sm:mt-0">
+          <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium text-gray-500">Gender</dt>
+            <dd className="mt-1 capitalize text-sm text-gray-900  sm:mt-0">
               {profile?.gender}
             </dd>
           </div>

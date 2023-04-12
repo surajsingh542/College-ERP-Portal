@@ -9,6 +9,8 @@ import {
   ADD_SUBJECT_FAIL,
   FETCH_FACULTY_FAIL,
   FETCH_FACULTY_SUCCESS,
+  FETCH_STUDENT_FAIL,
+  FETCH_STUDENT_SUCCESS,
   FETCH_SUBJECT_FAIL,
   FETCH_SUBJECT_SUCCESS,
 } from "./adminActionTypes";
@@ -90,6 +92,25 @@ const reducer = (state, action) => {
         students: [],
         subjects: [],
       };
+
+    case FETCH_STUDENT_SUCCESS:
+      console.log("Payload", payload);
+      return {
+        ...state,
+        error: null,
+        faculties: [],
+        students: payload,
+        subjects: [],
+      };
+    case FETCH_STUDENT_FAIL:
+      return {
+        ...state,
+        error: payload,
+        faculties: [],
+        students: [],
+        subjects: [],
+      };
+
     default:
       return state;
   }
@@ -294,6 +315,50 @@ export const AdminContextProvider = ({ children }) => {
     }
   };
 
+  //   get students
+  const fetchStudentsAction = async (formData) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userAuth?.userAuth?.token}`,
+      },
+    };
+    try {
+      const res = await axios.get(`${API_URL_ADMIN}/students`, config);
+      console.log("Response", res);
+      console.log(config.headers.Authorization);
+      if (res?.data?.status === "success") {
+        const filteredStudents = res?.data?.data.filter((student) => {
+          return (
+            student?.department === formData?.department &&
+            student?.semester.toString() === formData.semester.toString()
+          );
+        });
+        dispatch({
+          type: FETCH_STUDENT_SUCCESS,
+          payload: filteredStudents,
+        });
+
+        const msgStatus = document.querySelector(".msg__status");
+        const studentData = document.querySelector(".studentData");
+        if (filteredStudents.length <= 0) {
+          msgStatus.innerHTML =
+            "No Student Found for this Department in the current semester.";
+          msgStatus.style.display = "block";
+          studentData.style.display = "none";
+        } else {
+          msgStatus.style.display = "none";
+          studentData.style.display = "block";
+        }
+      }
+    } catch (error) {
+      dispatch({
+        type: FETCH_STUDENT_FAIL,
+        payload: error?.response?.data?.message,
+      });
+    }
+  };
+
   return (
     <adminContext.Provider
       value={{
@@ -303,9 +368,11 @@ export const AdminContextProvider = ({ children }) => {
         addAdminAction,
         fetchSubjectAction,
         fetchFacultiesAction,
+        fetchStudentsAction,
         subjects: state?.subjects,
         error: state?.error,
         faculties: state?.faculties,
+        students: state?.students,
       }}
     >
       {children}

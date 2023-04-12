@@ -12,7 +12,7 @@ const AddStudent = () => {
     dob: "",
     registrationNumber: "",
     gender: "",
-    year: "",
+    semester: "",
     department: "",
     fatherName: "",
     aadharCard: "",
@@ -38,7 +38,7 @@ const AddStudent = () => {
       dob: "",
       registrationNumber: "",
       gender: "",
-      year: "",
+      semester: "",
       department: "",
       fatherName: "",
       aadharCard: "",
@@ -156,16 +156,16 @@ const AddStudent = () => {
               </div>
 
               <div>
-                <label htmlFor="year">Current Academic Year</label>
+                <label htmlFor="semester">Current Academic Semester</label>
                 <input
                   required={true}
                   type="number"
                   min={1}
-                  max={5}
-                  name="year"
-                  id="year"
+                  max={10}
+                  name="semester"
+                  id="semester"
                   onChange={onChangeHandler}
-                  value={formData.year}
+                  value={formData.semester}
                   className="appearance-none block w-full p-2 my-3 leading-3 text-coolGray-900 border border-coolGray-200 rounded-md  placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
                 />
               </div>

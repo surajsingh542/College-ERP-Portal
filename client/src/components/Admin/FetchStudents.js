@@ -1,11 +1,12 @@
 import React, { useContext, useState } from "react";
 import { adminContext } from "../context/AdminContext/AdminContext";
 
-const FetchFaculties = () => {
-  const { fetchFacultiesAction, faculties, error } = useContext(adminContext);
+const FetchStudents = () => {
+  const { fetchStudentsAction, students, error } = useContext(adminContext);
 
   const [formData, setFormData] = useState({
     department: "",
+    semester: "",
   });
 
   const onChangeHandler = (e) => {
@@ -14,7 +15,7 @@ const FetchFaculties = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    fetchFacultiesAction(formData);
+    fetchStudentsAction(formData);
   };
 
   const onClickHandler = (e) => {
@@ -80,108 +81,50 @@ const FetchFaculties = () => {
                   </select>
                 </div>
 
+                <div>
+                  <label htmlFor="semester">Semester</label>
+                  <input
+                    required={true}
+                    type="number"
+                    min={1}
+                    max={10}
+                    name="semester"
+                    id="semester"
+                    onChange={onChangeHandler}
+                    value={formData.semester}
+                    className="block w-full lg:w-10/12 p-2 my-3 leading-3 text-coolGray-900 border border-coolGray-200 rounded-md  placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                  />
+                </div>
+
                 <button
                   className="inline-block py-3 my-3 px-7 w-9/12  lg:w-6/12 text-base text-green-50 font-medium text-center leading-6 bg-cyan-500 hover:bg-cyan-600 focus:ring-2  rounded-md shadow-sm"
                   type="submit"
                 >
-                  Fetch Faculty
+                  Fetch Students
                 </button>
               </div>
             </form>
           </div>
 
-          {/* Faculty Details */}
+          {/* Student Details */}
 
           <div className="mx-auto md:m-0 mb-7 w-10/12 min-w-fit md:w-4/12 md:max-w-xl md:ml-0 ">
             <div className="msg__status hidden mt-12 mx-auto max-w-fit bg-green-100 text-center border border-green-400 text-green-700 px-7 py-2 rounded-md"></div>
 
-            <div className="overflow-hidden facultyData  shadow sm:rounded-lg font-semibold   ">
-              {/* <table className="w-full">
-                <tbody className="flex flex-col">
-                  <div className="flex flex-row">
-                    <tr class=" block px-4 py-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
-                      <div class="text-sm font-medium text-gray-900 ">
-                        Registration Number
-                      </div>
-                    </tr>
-                    <tr class=" block px-4 py-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
-                      <div class="text-sm font-medium text-gray-900 ">Name</div>
-                    </tr>
-                    <tr class=" block px-4 py-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
-                      <div class="text-sm font-medium text-gray-900 ">
-                        Gender
-                      </div>
-                    </tr>
-                    <tr class=" block px-4 py-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
-                      <div class="text-sm font-medium text-gray-900 ">
-                        Email Address
-                      </div>
-                    </tr>
-                    <tr class=" block px-4 py-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
-                      <div class="text-sm font-medium text-gray-900 ">
-                        Contact Number
-                      </div>
-                    </tr>
-                  </div>
-
-                  <div className="flex flex-row">
-                    <tr class="bg-gray-100 block px-4 py-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
-                      <div class="text-sm font-medium text-gray-500 md:hidden">
-                        Registration Number
-                      </div>
-                      <div class="mt-1  text-sm text-gray-900  sm:mt-0">
-                        201901248
-                      </div>
-                    </tr>
-                    <tr class="bg-white block px-4 py-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
-                      <div class="text-sm font-medium text-gray-500 md:hidden">
-                        Name
-                      </div>
-                      <div class="mt-1 capitalize text-sm text-gray-900  sm:mt-0">
-                        Suraj Singh
-                      </div>
-                    </tr>
-                    <tr class="bg-gray-100 block px-4 py-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
-                      <div class="text-sm font-medium text-gray-500 md:hidden">
-                        Gender
-                      </div>
-                      <div class="mt-1 capitalize text-sm text-gray-900  sm:mt-0">
-                        Male
-                      </div>
-                    </tr>
-                    <tr class="bg-white block px-4 py-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
-                      <div class="text-sm font-medium text-gray-500 md:hidden">
-                        Email address
-                      </div>
-                      <div class="mt-1 lowercase text-sm text-gray-900  sm:mt-0">
-                        surajsingh04012002@gmail.com
-                      </div>
-                    </tr>
-                    <tr class="bg-gray-100 block px-4 py-5 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
-                      <div class="text-sm font-medium text-gray-500 md:hidden">
-                        Contact Number
-                      </div>
-                      <div class="mt-1  text-sm text-gray-900  sm:mt-0">
-                        1111111111
-                      </div>
-                    </tr>
-                  </div>
-                </tbody>
-              </table> */}
-
+            <div className="overflow-hidden studentData  shadow sm:rounded-lg font-semibold   ">
               {/* loop */}
 
-              {faculties.map((faculty) => {
+              {students.map((student) => {
                 return (
                   <div
-                    key={faculty?.registrationNumber}
+                    key={student?.registrationNumber}
                     className="flex flex-col  border border-coolGray-200  hover:border-green-400 sm:hover:rounded-lg hover:border-2 hover:bg-green-100"
                   >
                     <div
                       onClick={onClickHandler}
                       className="facDetailsHeader cursor-pointer flex  px-4 py-2 w-full flex-row justify-between"
                     >
-                      {faculty?.fullname}
+                      {student?.fullname}
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         data-name="Layer 1"
@@ -200,23 +143,23 @@ const FetchFaculties = () => {
                       <dl>
                         <div class="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
                           <dd class="mt-1 capitalize text-sm text-gray-900  sm:mt-0">
-                            {faculty.registrationNumber}
+                            {student.registrationNumber}
                           </dd>
                         </div>
 
                         <div class="bg-white px-4 py-2 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
                           <dd class="mt-1 lowercase text-sm text-gray-900  sm:mt-0">
-                            {faculty?.email}
+                            {student?.email}
                           </dd>
                         </div>
                         <div class="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
                           <dd class="mt-1 text-sm text-gray-900  sm:mt-0">
-                            {faculty?.contactNumber}
+                            {student?.contactNumber}
                           </dd>
                         </div>
                         <div class="bg-white px-4 py-2 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
                           <dd class="mt-1 text-sm text-gray-900  sm:mt-0">
-                            {faculty?.gender}
+                            {student?.gender}
                           </dd>
                         </div>
                       </dl>
@@ -232,4 +175,4 @@ const FetchFaculties = () => {
   );
 };
 
-export default FetchFaculties;
+export default FetchStudents;

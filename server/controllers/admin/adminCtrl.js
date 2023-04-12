@@ -163,7 +163,7 @@ const addStudentCtrl = async (req, res, next) => {
       dob,
       registrationNumber,
       gender,
-      year,
+      semester,
       department,
       fatherName,
       aadharCard,
@@ -178,7 +178,7 @@ const addStudentCtrl = async (req, res, next) => {
       dob == "" ||
       registrationNumber == "" ||
       gender == "" ||
-      year == "" ||
+      semester == "" ||
       department == "" ||
       fatherName == "" ||
       aadharCard == "" ||
@@ -198,7 +198,7 @@ const addStudentCtrl = async (req, res, next) => {
       !Number.isNaN(contactNumber) ||
       !Number.isNaN(registrationNumber) ||
       !Number.isNaN(aadharCard) ||
-      !Number.isNaN(year) ||
+      !Number.isNaN(semester) ||
       !Number.isNaN(batch)
     ) {
       return next(new AppErr("Please enter valid Numeric Field.", 400));
@@ -217,7 +217,7 @@ const addStudentCtrl = async (req, res, next) => {
       dob,
       registrationNumber,
       gender,
-      year,
+      semester,
       department,
       fatherName,
       aadharCard,
@@ -330,8 +330,7 @@ const getFacultiesCtrl = async (req, res) => {
 // get students
 const getStudentsCtrl = async (req, res) => {
   try {
-    const { department, year } = req.body;
-    const students = await Student.find({ department, year });
+    const students = await Student.find();
     res.json({
       status: "success",
       data: students,

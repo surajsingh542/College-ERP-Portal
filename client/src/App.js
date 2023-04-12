@@ -8,6 +8,7 @@ import AddStudent from "./components/Admin/AddStudent";
 import AddSubject from "./components/Admin/AddSubject";
 import AddAdmin from "./components/Admin/AddAdmin";
 import FetchFaculties from "./components/Admin/FetchFaculties";
+import FetchStudents from "./components/Admin/FetchStudents";
 function App() {
   return (
     <BrowserRouter>
@@ -21,6 +22,7 @@ function App() {
         <Route path="/add-subject" element={<AddSubject />} />
         <Route path="/add-admin" element={<AddAdmin />} />
         <Route path="/get-faculties" element={<FetchFaculties />} />
+        <Route path="/get-students" element={<FetchStudents />} />
       </Routes>
     </BrowserRouter>
   );
