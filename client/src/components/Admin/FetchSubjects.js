@@ -1,12 +1,12 @@
 import React, { useContext, useState } from "react";
 import { adminContext } from "../context/AdminContext/AdminContext";
 
-const FetchStudents = () => {
-  const { fetchStudentsAction, students, error } = useContext(adminContext);
+const FetchSubjects = () => {
+  const { fetchSubjectAction, subjects, error } = useContext(adminContext);
+  console.log("Subjects", subjects);
 
   const [formData, setFormData] = useState({
     department: "",
-    semester: "",
   });
 
   const onChangeHandler = (e) => {
@@ -15,7 +15,7 @@ const FetchStudents = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    fetchStudentsAction(formData);
+    fetchSubjectAction(formData.department);
   };
 
   const onClickHandler = (e) => {
@@ -81,50 +81,33 @@ const FetchStudents = () => {
                   </select>
                 </div>
 
-                <div>
-                  <label htmlFor="semester">Semester</label>
-                  <input
-                    required={true}
-                    type="number"
-                    min={1}
-                    max={10}
-                    name="semester"
-                    id="semester"
-                    onChange={onChangeHandler}
-                    value={formData.semester}
-                    className="block w-full lg:w-10/12 p-2 my-3 leading-3 text-coolGray-900 border border-coolGray-200 rounded-md  placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-                  />
-                </div>
-
                 <button
                   className="inline-block py-3 my-3 px-7 w-9/12  lg:w-6/12 text-base text-green-50 font-medium text-center leading-6 bg-cyan-500 hover:bg-cyan-600 focus:ring-2  rounded-md shadow-sm"
                   type="submit"
                 >
-                  Fetch Students
+                  Fetch Subjects
                 </button>
               </div>
             </form>
           </div>
 
-          {/* Student Details */}
+          {/* Subject Details */}
 
           <div className="mx-auto md:m-0 mb-7 w-10/12 min-w-fit md:w-4/12 md:max-w-xl md:ml-0 ">
-            <div className="msg__status hidden mt-12 mx-auto max-w-fit bg-green-100 text-center border border-green-400 text-green-700 px-7 py-2 rounded-md"></div>
+            <div className="sub_msg__status hidden mt-12 mx-auto max-w-fit bg-green-100 text-center border border-green-400 text-green-700 px-7 py-2 rounded-md"></div>
 
-            <div className="overflow-hidden studentData  shadow sm:rounded-lg font-semibold   ">
-              {/* loop */}
-
-              {students.map((student) => {
+            <div className="overflow-hidden subjectData shadow sm:rounded-lg font-semibold   ">
+              {subjects.map((subject) => {
                 return (
                   <div
-                    key={student?.registrationNumber}
+                    key={subject?.subjectCode}
                     className="flex flex-col  border border-coolGray-200  hover:border-green-400 sm:hover:rounded-lg hover:border-2 hover:bg-green-100"
                   >
                     <div
                       onClick={onClickHandler}
                       className=" cursor-pointer flex  px-4 py-2 w-full flex-row justify-between"
                     >
-                      {student?.fullname}
+                      {subject?.subjectName}
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         data-name="Layer 1"
@@ -141,25 +124,9 @@ const FetchStudents = () => {
 
                     <div className=" hidden">
                       <dl>
-                        <div class="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
-                          <dd class="mt-1 capitalize text-sm text-gray-900  sm:mt-0">
-                            {student.registrationNumber}
-                          </dd>
-                        </div>
-
-                        <div class="bg-white px-4 py-2 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
-                          <dd class="mt-1 lowercase text-sm text-gray-900  sm:mt-0">
-                            {student?.email}
-                          </dd>
-                        </div>
-                        <div class="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
-                          <dd class="mt-1 text-sm text-gray-900  sm:mt-0">
-                            {student?.contactNumber}
-                          </dd>
-                        </div>
-                        <div class="bg-white px-4 py-2 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
-                          <dd class="mt-1 text-sm text-gray-900  sm:mt-0">
-                            {student?.gender}
+                        <div className="bg-gray-50 px-4 py-2 sm:grid sm:grid-cols-2 sm:gap-4 sm:px-6">
+                          <dd className="mt-1 capitalize text-sm text-gray-900  sm:mt-0">
+                            {subject.subjectCode}
                           </dd>
                         </div>
                       </dl>
@@ -175,4 +142,4 @@ const FetchStudents = () => {
   );
 };
 
-export default FetchStudents;
+export default FetchSubjects;

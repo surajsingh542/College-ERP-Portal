@@ -266,6 +266,18 @@ export const AdminContextProvider = ({ children }) => {
           type: FETCH_SUBJECT_SUCCESS,
           payload: filteredSubjects,
         });
+
+        const msgStatus = document.querySelector(".sub_msg__status");
+        const subjectData = document.querySelector(".subjectData");
+        if (filteredSubjects.length <= 0) {
+          msgStatus.innerHTML =
+            "No Subject Found for this Department in the current semester.";
+          msgStatus.style.display = "block";
+          subjectData.style.display = "none";
+        } else {
+          msgStatus.style.display = "none";
+          subjectData.style.display = "block";
+        }
       }
     } catch (error) {
       dispatch({
