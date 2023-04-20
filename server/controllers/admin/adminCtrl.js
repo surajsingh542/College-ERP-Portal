@@ -260,6 +260,9 @@ const addSubjectCtrl = async (req, res, next) => {
 const adminProfileCtrl = async (req, res, next) => {
   try {
     const admin = await Admin.findById(req.user);
+    if (!admin) {
+      return next(new AppErr("Invalid User Login", 403));
+    }
     res.json({
       status: "success",
       data: admin,

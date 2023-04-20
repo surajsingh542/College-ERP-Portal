@@ -40,9 +40,12 @@ const facultyLoginCtrl = async (req, res, next) => {
 };
 
 // faculty profile
-const getFacultyProfile = async (req, res) => {
+const getFacultyProfile = async (req, res, next) => {
   try {
     const faculty = await Faculty.findById(req.user);
+    if (!faculty) {
+      return next(new AppErr("Invalid User Login", 403));
+    }
     res.json({
       status: "success",
       data: faculty,

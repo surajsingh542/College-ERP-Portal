@@ -42,7 +42,7 @@ const AddSubject = () => {
         </>
       ) : (
         <>
-          <div class="msg__status hidden mt-12 mx-auto max-w-fit bg-green-100 text-center border-green-400 text-green-700 px-7 py-2 rounded-md"></div>
+          <div className="msg__status hidden mt-12 mx-auto max-w-fit bg-green-100 text-center border-green-400 text-green-700 px-7 py-2 rounded-md"></div>
           <form action="" onSubmit={submitHandler}>
             <div className="grid gap-4 max-w-md mt-8 px-8 mx-auto grid-cols-1  md:max-w-xl ">
               <div>

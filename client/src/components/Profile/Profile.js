@@ -10,7 +10,7 @@ const Profile = () => {
     fetchAdminProfileAction();
   }, []);
   return (
-    <section className="w-12/12 mx-auto flex mt-12 flex-col md:flex-row">
+    <section className="w-12/12 mx-auto flex mt-12 flex-col md:flex-row md:justify-center">
       {error ? (
         <>
           <div
