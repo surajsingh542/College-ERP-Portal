@@ -6,7 +6,7 @@ import {
   FETCH_PROFILE_SUCCESS,
   FETCH_PROFILE_FAIL,
 } from "./authActionTypes";
-import { API_URL_ADMIN, API_URL_BASE } from "../../../utils/apiURL";
+import { API_URL_ADMIN, API_URL_BASE,API_URL_FACULTY } from "../../../utils/apiURL";
 // Auth Context
 export const authContext = createContext();
 
@@ -70,6 +70,7 @@ const AuthContextProvider = ({ children }) => {
       },
     };
     try {
+      // Hide the error message
       const loginErr = document.querySelectorAll(".login-error");
       loginErr.forEach((err) => {
         if (!err.classList.contains("hidden")) {
@@ -133,12 +134,38 @@ const AuthContextProvider = ({ children }) => {
     }
   };
 
+  // Faculty Profile Action
+  const fetchFacultyProfileAction = async () => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${state?.userAuth?.token}`,
+      },
+    };
+    try {
+      const res = await axios.get(`${API_URL_FACULTY}/profile`, config);
+      console.log(res);
+      if (res?.data?.status === "success") {
+        dispatch({
+          type: FETCH_PROFILE_SUCCESS,
+          payload: res.data.data,
+        });
+      }
+    } catch (error) {
+      dispatch({
+        type: FETCH_PROFILE_FAIL,
+        payload: error?.response?.data?.message,
+      });
+    }
+  };
+
   return (
     <authContext.Provider
       value={{
         loginUserAction,
         userAuth: state,
         fetchAdminProfileAction,
+        fetchFacultyProfileAction,
         profile: state?.profile,
         error: state?.error,
       }}
