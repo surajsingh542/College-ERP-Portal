@@ -63,13 +63,20 @@ const AuthContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
   // Login Action
-  const loginUserAction = async (formData, title) => {
+  const loginUserAction = async (formData, title, event) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
       },
     };
     try {
+      const loginErr = document.querySelectorAll(".login-error");
+      loginErr.forEach((err) => {
+        if (!err.classList.contains("hidden")) {
+          err.classList.add("hidden");
+        }
+      });
+
       const res = await axios.post(
         `${API_URL_BASE}/${title.toLowerCase()}/login`,
         formData,
@@ -82,13 +89,22 @@ const AuthContextProvider = ({ children }) => {
           payload: res.data,
         });
         // redirect
-        window.location.href = "/admin-profile";
+        if (title.toLowerCase() === "admin") {
+          window.location.href = "/admin-profile";
+        } else if (title.toLowerCase() === "faculty") {
+          window.location.href = "/faculty-profile";
+        } else {
+          window.location.href = "/student-profile";
+        }
       }
     } catch (error) {
       dispatch({
         type: LOGIN_FAILED,
         payload: error?.response?.data?.message,
       });
+      event.target.parentNode.firstElementChild.lastElementChild.classList.remove(
+        "hidden"
+      );
     }
   };
 
