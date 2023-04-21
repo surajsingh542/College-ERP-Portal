@@ -7,6 +7,11 @@ const studentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    loginType: {
+      type: String,
+      default: "student",
+      required: true,
+    },
     email: {
       type: String,
       required: true,

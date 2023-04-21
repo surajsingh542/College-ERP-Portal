@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar/Navbar";
 import Login from "./components/Forms/Login";
 import Home from "./components/Home/Home";
 import Admin from "./components/Admin/Admin";
@@ -11,10 +12,12 @@ import FetchFaculties from "./components/Admin/FetchFaculties";
 import FetchStudents from "./components/Admin/FetchStudents";
 import FetchSubjects from "./components/Admin/FetchSubjects";
 import FacultyProfile from "./components/Faculty/FacultyProfile";
+import Attendance from "./components/Faculty/Attendance";
 
 function App() {
   return (
     <BrowserRouter>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -28,6 +31,7 @@ function App() {
         <Route path="/get-students" element={<FetchStudents />} />
         <Route path="/get-subjects" element={<FetchSubjects />} />
         <Route path="/faculty-profile" element={<FacultyProfile />} />
+        <Route path="/mark-attendance" element={<Attendance />} />
       </Routes>
     </BrowserRouter>
   );

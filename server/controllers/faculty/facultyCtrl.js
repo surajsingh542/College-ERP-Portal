@@ -30,6 +30,7 @@ const facultyLoginCtrl = async (req, res, next) => {
 
     res.json({
       status: "success",
+      loginType: facultyFound.loginType,
       fullname: facultyFound.fullname,
       id: facultyFound._id,
       token: generateToken(facultyFound._id),

@@ -72,6 +72,7 @@ const adminLoginCtrl = async (req, res, next) => {
 
     res.json({
       status: "success",
+      loginType: adminFound.loginType,
       fullname: adminFound.fullname,
       id: adminFound._id,
       token: generateToken(adminFound._id),

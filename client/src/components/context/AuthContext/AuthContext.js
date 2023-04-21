@@ -5,8 +5,13 @@ import {
   LOGIN_FAILED,
   FETCH_PROFILE_SUCCESS,
   FETCH_PROFILE_FAIL,
+  LOGOUT,
 } from "./authActionTypes";
-import { API_URL_ADMIN, API_URL_BASE,API_URL_FACULTY } from "../../../utils/apiURL";
+import {
+  API_URL_ADMIN,
+  API_URL_BASE,
+  API_URL_FACULTY,
+} from "../../../utils/apiURL";
 // Auth Context
 export const authContext = createContext();
 
@@ -53,6 +58,17 @@ const reducer = (state, action) => {
         loading: false,
         profile: null,
       };
+    // logout
+    case LOGOUT:
+      // remove from storage
+      localStorage.removeItem("userAuth");
+      return {
+        ...state,
+        userAuth: payload,
+        error: null,
+        loading: false,
+        profile: null,
+      };
     default:
       return state;
   }
@@ -90,9 +106,9 @@ const AuthContextProvider = ({ children }) => {
           payload: res.data,
         });
         // redirect
-        if (title.toLowerCase() === "admin") {
+        if (res?.data?.loginType === "admin") {
           window.location.href = "/admin-profile";
-        } else if (title.toLowerCase() === "faculty") {
+        } else if (res?.data?.loginType === "faculty") {
           window.location.href = "/faculty-profile";
         } else {
           window.location.href = "/student-profile";
@@ -109,6 +125,22 @@ const AuthContextProvider = ({ children }) => {
     }
   };
 
+  // Logout Action
+  const logoutUserAction = () => {
+    const redirect = state?.userAuth?.loginType;
+    dispatch({
+      type: LOGOUT,
+      payload: null,
+    });
+    // Redirect
+    // redirect
+    if (redirect === "admin") {
+      window.location.href = "/admin";
+    } else {
+      window.location.href = "/";
+    }
+  };
+
   // Admin Profile Action
   const fetchAdminProfileAction = async () => {
     const config = {
@@ -119,7 +151,6 @@ const AuthContextProvider = ({ children }) => {
     };
     try {
       const res = await axios.get(`${API_URL_ADMIN}/profile`, config);
-      console.log(res);
       if (res?.data?.status === "success") {
         dispatch({
           type: FETCH_PROFILE_SUCCESS,
@@ -163,7 +194,8 @@ const AuthContextProvider = ({ children }) => {
     <authContext.Provider
       value={{
         loginUserAction,
-        userAuth: state,
+        userAuth: state?.userAuth,
+        logoutUserAction,
         fetchAdminProfileAction,
         fetchFacultyProfileAction,
         profile: state?.profile,

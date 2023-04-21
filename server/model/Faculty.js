@@ -7,6 +7,11 @@ const facultySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    loginType: {
+      type: String,
+      default: "faculty",
+      required: true,
+    },
     email: {
       type: String,
       required: true,

@@ -7,6 +7,11 @@ const adminSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    loginType: {
+      type: String,
+      default: "admin",
+      required: true,
+    },
     email: {
       type: String,
       required: true,
