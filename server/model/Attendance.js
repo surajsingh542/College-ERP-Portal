@@ -7,11 +7,11 @@ const attendanceSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Subject",
     },
-    student: {
+    userID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Student",
     },
-    attendedOn: [Date],
+    attendedOn: [{ type: Date }],
   },
   {
     timestamps: true,

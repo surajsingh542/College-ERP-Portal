@@ -3,10 +3,10 @@ import { adminContext } from "../context/AdminContext/AdminContext";
 
 const FetchSubjects = () => {
   const { fetchSubjectAction, subjects, error } = useContext(adminContext);
-  console.log("Subjects", subjects);
 
   const [formData, setFormData] = useState({
     department: "",
+    semester: "",
   });
 
   const onChangeHandler = (e) => {
@@ -15,7 +15,7 @@ const FetchSubjects = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    fetchSubjectAction(formData.department);
+    fetchSubjectAction(formData);
   };
 
   const onClickHandler = (e) => {
@@ -79,6 +79,21 @@ const FetchSubjects = () => {
                     </option>
                     <option value="Civil Engineering">Civil Engineering</option>
                   </select>
+                </div>
+
+                <div>
+                  <label htmlFor="semester">Semester</label>
+                  <input
+                    required={true}
+                    type="number"
+                    min={1}
+                    max={10}
+                    name="semester"
+                    id="semester"
+                    onChange={onChangeHandler}
+                    value={formData.semester}
+                    className="block w-full lg:w-10/12 p-2 my-3 leading-3 text-coolGray-900 border border-coolGray-200 rounded-md  placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                  />
                 </div>
 
                 <button

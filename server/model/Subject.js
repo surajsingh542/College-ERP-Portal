@@ -16,7 +16,17 @@ const subjectSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    lectureGivenOn: [Date],
+    semester: {
+      type: Number,
+      min: 1,
+      max: 10,
+      required: true,
+    },
+    assignedTo: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Faculty",
+    },
+    // lectureGivenOn: [Date],
   },
   {
     timestamps: true,

@@ -26,6 +26,9 @@ const facultySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    aadharCard: {
+      type: Number,
+    },
     profileImage: {
       type: Object,
     },
@@ -49,12 +52,18 @@ const facultySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    subjectsAssigned: [
+    // subjectsAssigned: [
+    //   {
+    //     value: { type: mongoose.Schema.Types.ObjectId, ref: "Subject" },
+    //     label: {
+    //       type: String,
+    //     },
+    //   },
+    // ],
+    attendance: [
       {
-        value: { type: mongoose.Schema.Types.ObjectId, ref: "Subject" },
-        label: {
-          type: String,
-        },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Attendance",
       },
     ],
   },

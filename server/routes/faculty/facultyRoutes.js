@@ -6,9 +6,11 @@ const {
   getFacultyProfile,
   updateProfileCtrl,
   uploadProfilePhotoCtrl,
+  getFacultySubjects,
   markAttendanceCtrl,
   uploadMarksCtrl,
   updatePasswordCtrl,
+  getStudentsCtrl,
 } = require("../../controllers/faculty/facultyCtrl");
 const isLogin = require("../../middlewares/isLogin");
 const facultyRoutes = express.Router();
@@ -23,6 +25,12 @@ facultyRoutes.post("/login", facultyLoginCtrl);
 
 // GET/api/v1/faculty/profile
 facultyRoutes.get("/profile", isLogin, getFacultyProfile);
+
+// GET/api/v1/faculty/assigned-subjects
+facultyRoutes.get("/assigned-subjects", isLogin, getFacultySubjects);
+
+// GET/api/v1/faculty/students
+facultyRoutes.get("/students", isLogin, getStudentsCtrl);
 
 // PUT/api/v1/faculty/profile
 facultyRoutes.put("/profile", isLogin, updateProfileCtrl);

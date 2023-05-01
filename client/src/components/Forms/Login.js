@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { authContext } from "../context/AuthContext/AuthContext";
 
 const Login = (props) => {
-  const { loginUserAction, userAuth } = useContext(authContext);
+  const { loginUserAction, userAuth, error } = useContext(authContext);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -32,9 +32,7 @@ const Login = (props) => {
       <div className="text-center ">
         <h1 className=" font-medium text-xl">{props.title}</h1>
         <p className="login-error hidden">
-          {userAuth?.error && (
-            <span className="text-red-500 ">{userAuth?.error}</span>
-          )}
+          {error && <span className="text-red-500 ">{error}</span>}
         </p>
       </div>
 

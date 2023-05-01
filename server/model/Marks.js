@@ -2,9 +2,13 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const markSchema = new Schema({
+  student: {
+    type: Schema.Types.ObjectId,
+    ref: "Student",
+  },
   subject: {
     type: Schema.Types.ObjectId,
-    ref: "subject",
+    ref: "Subject",
   },
   exam: {
     type: String,
@@ -23,6 +27,9 @@ const markSchema = new Schema({
   },
   semester: {
     type: Number,
+    min: 1,
+    max: 10,
+    required: true,
   },
   uploadedBy: {
     type: mongoose.Schema.Types.ObjectId,

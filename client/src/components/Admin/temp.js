@@ -1,19 +1,20 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { adminContext } from "../context/AdminContext/AdminContext";
 
 const AddFaculty = () => {
-  const { addFacultyAction, error } = useContext(adminContext);
+  const { addFacultyAction, fetchSubjectAction, error, subjects } =
+    useContext(adminContext);
 
   const [formData, setFormData] = useState({
     fullname: "",
     email: "",
     contactNumber: "",
     password: "",
-    aadharCard: "",
     registrationNumber: "",
     gender: "",
     designation: "",
     department: "",
+    subjectsAssigned: "",
     dob: "",
   });
 
@@ -25,10 +26,30 @@ const AddFaculty = () => {
     });
   };
 
+  const multiSelectHandler = (data) => {
+    setFormData({
+      ...formData,
+      subjectsAssigned: data,
+    });
+  };
+
+  useEffect(() => {
+    fetchSubjectAction(formData?.department);
+  }, [formData?.department]);
+
   // const filteredSubjects = subjects.filter((subject) => {
   //   console.log(formData);
   //   return subject?.department === formData?.department;
   // });
+
+  const subjectOptions = [];
+  subjects.forEach((sub) => {
+    const obj = {
+      value: sub._id,
+      label: sub.subjectName,
+    };
+    subjectOptions.push(obj);
+  });
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -40,7 +61,6 @@ const AddFaculty = () => {
       password: "",
       registrationNumber: "",
       gender: "",
-      aadharCard: "",
       designation: "",
       department: "",
       subjectsAssigned: "",
@@ -93,8 +113,6 @@ const AddFaculty = () => {
                   required={true}
                   type="text"
                   inputMode="numeric"
-                  minLength={10}
-                  maxLength={10}
                   name="contactNumber"
                   onChange={onChangeHandler}
                   value={formData.contactNumber}
@@ -143,20 +161,6 @@ const AddFaculty = () => {
                 </select>
               </div>
               <div>
-                <label for="aadharCard">Aadhar Card Number</label>
-                <input
-                  required={true}
-                  type="text"
-                  inputMode="numeric"
-                  minLength={16}
-                  maxLength={16}
-                  name="aadharCard"
-                  onChange={onChangeHandler}
-                  value={formData.aadharCard}
-                  className="appearance-none block w-full p-2 my-3 leading-3 text-coolGray-900 border border-coolGray-200 rounded-md  placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-                />
-              </div>
-              <div>
                 <label for="designation">Designation</label>
                 <input
                   required={true}
@@ -194,6 +198,41 @@ const AddFaculty = () => {
                   </option>
                   <option value="Civil Engineering">Civil Engineering</option>
                 </select>
+              </div>
+
+              <div>
+                <label for="subjectsAssigned">Subjects Assigned</label>
+
+                <Select
+                  styles={{
+                    control: (baseStyles, state) => ({
+                      ...baseStyles,
+                      border: "0",
+                      boxShadow: "0",
+                      outline: "none",
+                      "&:hover": {
+                        border: "0",
+                        outline: "none",
+                      },
+                    }),
+                  }}
+                  classNames={{
+                    control: (state) =>
+                      state.isFocused
+                        ? "outline-none ring-2 ring-green-500 ring-opacity-50"
+                        : "",
+                  }}
+                  required={true}
+                  options={subjectOptions}
+                  placeholder="Select Subjects assigned to Faculty"
+                  isMulti
+                  isSearchable={true}
+                  name="subjectsAssigned"
+                  id="subjectsAssigned"
+                  onChange={multiSelectHandler}
+                  value={formData.subjectsAssigned}
+                  className="block w-full  my-3 leading-3 text-coolGray-900 border border-coolGray-200 rounded-md  placeholder-coolGray-400 "
+                />
               </div>
 
               <div>

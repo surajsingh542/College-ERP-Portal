@@ -85,6 +85,7 @@ const reducer = (state, action) => {
         subjects: [],
       };
     case FETCH_FACULTY_FAIL:
+      console.log("Fail");
       return {
         ...state,
         error: payload,
@@ -126,7 +127,7 @@ export const AdminContextProvider = ({ children }) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${userAuth?.userAuth?.token}`,
+        Authorization: `Bearer ${userAuth?.token}`,
       },
     };
     try {
@@ -158,7 +159,7 @@ export const AdminContextProvider = ({ children }) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${userAuth?.userAuth?.token}`,
+        Authorization: `Bearer ${userAuth?.token}`,
       },
     };
     try {
@@ -186,7 +187,7 @@ export const AdminContextProvider = ({ children }) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${userAuth?.userAuth?.token}`,
+        Authorization: `Bearer ${userAuth?.token}`,
       },
     };
     try {
@@ -218,7 +219,7 @@ export const AdminContextProvider = ({ children }) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${userAuth?.userAuth?.token}`,
+        Authorization: `Bearer ${userAuth?.token}`,
       },
     };
     try {
@@ -230,7 +231,7 @@ export const AdminContextProvider = ({ children }) => {
       console.log(res);
 
       if (res?.data?.status === "success") {
-        const msgStatus = document.querySelector(".msg__status");
+        const msgStatus = document.querySelector(".sub_msg__status");
         msgStatus.innerHTML = "Subject has been added successfully.";
         msgStatus.style.display = "block";
         setTimeout(() => {
@@ -246,11 +247,11 @@ export const AdminContextProvider = ({ children }) => {
   };
 
   //   get subjects
-  const fetchSubjectAction = async (dept) => {
+  const fetchSubjectAction = async (formData) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${userAuth?.userAuth?.token}`,
+        Authorization: `Bearer ${userAuth?.token}`,
       },
     };
     try {
@@ -259,8 +260,13 @@ export const AdminContextProvider = ({ children }) => {
       console.log(config.headers.Authorization);
       if (res?.data?.status === "success") {
         const filteredSubjects = res?.data?.data.filter((subject) => {
-          return subject?.department === dept;
+          return (
+            subject?.department === formData?.department &&
+            subject?.semester === parseInt(formData?.semester)
+          );
         });
+
+        console.log("Filtered Subjects", filteredSubjects);
 
         dispatch({
           type: FETCH_SUBJECT_SUCCESS,
@@ -292,7 +298,7 @@ export const AdminContextProvider = ({ children }) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${userAuth?.userAuth?.token}`,
+        Authorization: `Bearer ${userAuth?.token}`,
       },
     };
     try {
@@ -327,12 +333,41 @@ export const AdminContextProvider = ({ children }) => {
     }
   };
 
+  //   get subject faculties
+  const fetchSubFacultiesAction = async (formData) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userAuth?.token}`,
+      },
+    };
+    try {
+      const res = await axios.get(`${API_URL_ADMIN}/faculties`, config);
+      console.log("Response", res);
+      console.log(config.headers.Authorization);
+      if (res?.data?.status === "success") {
+        const deptFaculties = res?.data?.data.filter((faculty) => {
+          return faculty?.department === formData?.department;
+        });
+        dispatch({
+          type: FETCH_FACULTY_SUCCESS,
+          payload: deptFaculties,
+        });
+      }
+    } catch (error) {
+      dispatch({
+        type: FETCH_FACULTY_FAIL,
+        payload: error?.response?.data?.message,
+      });
+    }
+  };
+
   //   get students
   const fetchStudentsAction = async (formData) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${userAuth?.userAuth?.token}`,
+        Authorization: `Bearer ${userAuth?.token}`,
       },
     };
     try {
@@ -380,6 +415,7 @@ export const AdminContextProvider = ({ children }) => {
         addAdminAction,
         fetchSubjectAction,
         fetchFacultiesAction,
+        fetchSubFacultiesAction,
         fetchStudentsAction,
         subjects: state?.subjects,
         error: state?.error,

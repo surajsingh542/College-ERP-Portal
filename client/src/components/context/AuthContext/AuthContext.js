@@ -119,6 +119,7 @@ const AuthContextProvider = ({ children }) => {
         type: LOGIN_FAILED,
         payload: error?.response?.data?.message,
       });
+      console.log(event.target.parentNode.firstElementChild.lastElementChild);
       event.target.parentNode.firstElementChild.lastElementChild.classList.remove(
         "hidden"
       );

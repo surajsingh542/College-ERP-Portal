@@ -1,12 +1,11 @@
 import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { PlusIcon } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
 import { authContext } from "../context/AuthContext/AuthContext";
 import { useContext } from "react";
 
 export default function Navbar() {
-  const { logoutUserAction, profile, userAuth } = useContext(authContext);
+  const { logoutUserAction, userAuth } = useContext(authContext);
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -48,13 +47,14 @@ export default function Navbar() {
                     </Link>
                   )}
 
+                  {/* Admin Navigation */}
                   {userAuth?.token && userAuth?.loginType === "admin" && (
                     <>
                       <Link
                         to="/admin-profile"
                         className="text-gray-300 hover:bg-gray-700 capitalize hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                       >
-                        {profile?.fullname}
+                        {userAuth?.fullname}
                       </Link>
                       <Link
                         to="/add-faculty"
@@ -97,6 +97,18 @@ export default function Navbar() {
                         className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                       >
                         Get Subjects
+                      </Link>
+                    </>
+                  )}
+
+                  {/* Faculty Navigation */}
+                  {userAuth?.token && userAuth?.loginType === "faculty" && (
+                    <>
+                      <Link
+                        to="/mark-attendance"
+                        className="text-gray-300 hover:bg-gray-700 capitalize hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                      >
+                        Mark Attendance
                       </Link>
                     </>
                   )}
@@ -153,40 +165,91 @@ export default function Navbar() {
           {/* Mobile */}
           <Disclosure.Panel className="md:hidden">
             <div className="space-y-1 px-2 pt-2 pb-3 sm:px-3">
-              <Link
-                to="/"
-                className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-              >
-                Home
-              </Link>
-
-              {userAuth?.userAuth?.token && (
+              {!userAuth?.token && (
                 <Link
-                  to="/dashboard"
+                  to="/"
                   className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                 >
-                  Dashboard
+                  Home
                 </Link>
               )}
 
-              {!userAuth?.userAuth?.token && (
+              {/* Admin Navigation */}
+              {userAuth?.token && userAuth?.loginType === "admin" && (
                 <>
                   <Link
-                    to="/login"
+                    to="/admin-profile"
                     className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                   >
-                    Login
+                    {userAuth?.fullname}
                   </Link>
                   <Link
-                    to="/register"
+                    to="/add-faculty"
                     className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                   >
-                    Register
+                    Add Faculty
+                  </Link>
+                  <Link
+                    to="/add-student"
+                    className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                  >
+                    Add Student
+                  </Link>
+                  <Link
+                    to="/add-subject"
+                    className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                  >
+                    Add Subject
+                  </Link>
+                  <Link
+                    to="/add-admin"
+                    className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                  >
+                    Add Admin
+                  </Link>
+                  <Link
+                    to="/get-faculties"
+                    className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                  >
+                    Get Faculties
+                  </Link>
+                  <Link
+                    to="/get-students"
+                    className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                  >
+                    Get Students
+                  </Link>
+                  <Link
+                    to="/get-subjects"
+                    className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                  >
+                    Get Subjects
                   </Link>
                 </>
               )}
 
-              {userAuth?.userAuth?.token && (
+              {/* Faculty Navigation */}
+              {userAuth?.token && userAuth?.loginType === "faculty" && (
+                <>
+                  <Link
+                    to="/mark-attendance"
+                    className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                  >
+                    Mark Attendance
+                  </Link>
+                </>
+              )}
+
+              {!userAuth?.token && (
+                <Link
+                  to="/login"
+                  className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                >
+                  Login
+                </Link>
+              )}
+
+              {userAuth?.token && (
                 <button
                   onClick={logoutUserAction}
                   className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
