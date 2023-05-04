@@ -5,8 +5,13 @@ import {
   LOGIN_FAILED,
   FETCH_PROFILE_SUCCESS,
   FETCH_PROFILE_FAIL,
+  LOGOUT,
 } from "./authActionTypes";
-import { API_URL_ADMIN, API_URL_BASE } from "../../../utils/apiURL";
+import {
+  API_URL_ADMIN,
+  API_URL_BASE,
+  API_URL_FACULTY,
+} from "../../../utils/apiURL";
 // Auth Context
 export const authContext = createContext();
 
@@ -53,6 +58,17 @@ const reducer = (state, action) => {
         loading: false,
         profile: null,
       };
+    // logout
+    case LOGOUT:
+      // remove from storage
+      localStorage.removeItem("userAuth");
+      return {
+        ...state,
+        userAuth: payload,
+        error: null,
+        loading: false,
+        profile: null,
+      };
     default:
       return state;
   }
@@ -63,13 +79,21 @@ const AuthContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
   // Login Action
-  const loginUserAction = async (formData, title) => {
+  const loginUserAction = async (formData, title, event) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
       },
     };
     try {
+      // Hide the error message
+      const loginErr = document.querySelectorAll(".login-error");
+      loginErr.forEach((err) => {
+        if (!err.classList.contains("hidden")) {
+          err.classList.add("hidden");
+        }
+      });
+
       const res = await axios.post(
         `${API_URL_BASE}/${title.toLowerCase()}/login`,
         formData,
@@ -82,13 +106,39 @@ const AuthContextProvider = ({ children }) => {
           payload: res.data,
         });
         // redirect
-        window.location.href = "/admin-profile";
+        if (res?.data?.loginType === "admin") {
+          window.location.href = "/admin-profile";
+        } else if (res?.data?.loginType === "faculty") {
+          window.location.href = "/faculty-profile";
+        } else {
+          window.location.href = "/student-profile";
+        }
       }
     } catch (error) {
       dispatch({
         type: LOGIN_FAILED,
         payload: error?.response?.data?.message,
       });
+      console.log(event.target.parentNode.firstElementChild.lastElementChild);
+      event.target.parentNode.firstElementChild.lastElementChild.classList.remove(
+        "hidden"
+      );
+    }
+  };
+
+  // Logout Action
+  const logoutUserAction = () => {
+    const redirect = state?.userAuth?.loginType;
+    dispatch({
+      type: LOGOUT,
+      payload: null,
+    });
+    // Redirect
+    // redirect
+    if (redirect === "admin") {
+      window.location.href = "/admin";
+    } else {
+      window.location.href = "/";
     }
   };
 
@@ -102,6 +152,30 @@ const AuthContextProvider = ({ children }) => {
     };
     try {
       const res = await axios.get(`${API_URL_ADMIN}/profile`, config);
+      if (res?.data?.status === "success") {
+        dispatch({
+          type: FETCH_PROFILE_SUCCESS,
+          payload: res.data.data,
+        });
+      }
+    } catch (error) {
+      dispatch({
+        type: FETCH_PROFILE_FAIL,
+        payload: error?.response?.data?.message,
+      });
+    }
+  };
+
+  // Faculty Profile Action
+  const fetchFacultyProfileAction = async () => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${state?.userAuth?.token}`,
+      },
+    };
+    try {
+      const res = await axios.get(`${API_URL_FACULTY}/profile`, config);
       console.log(res);
       if (res?.data?.status === "success") {
         dispatch({
@@ -121,8 +195,10 @@ const AuthContextProvider = ({ children }) => {
     <authContext.Provider
       value={{
         loginUserAction,
-        userAuth: state,
+        userAuth: state?.userAuth,
+        logoutUserAction,
         fetchAdminProfileAction,
+        fetchFacultyProfileAction,
         profile: state?.profile,
         error: state?.error,
       }}

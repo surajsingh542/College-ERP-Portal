@@ -5,12 +5,15 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import AuthContextProvider from "./components/context/AuthContext/AuthContext";
 import { AdminContextProvider } from "./components/context/AdminContext/AdminContext";
+import { FacultyContextProvider } from "./components/context/FacultyContext/FacultyContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <AuthContextProvider>
     <AdminContextProvider>
-      <App />
+      <FacultyContextProvider>
+        <App />
+      </FacultyContextProvider>
     </AdminContextProvider>
   </AuthContextProvider>
 );

@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { authContext } from "../context/AuthContext/AuthContext";
 
 const Login = (props) => {
-  const { loginUserAction, userAuth } = useContext(authContext);
+  const { loginUserAction, userAuth, error } = useContext(authContext);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -18,17 +18,21 @@ const Login = (props) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    loginUserAction(formData, props.title);
+    loginUserAction(formData, props.title, e);
+    if (userAuth?.error) {
+      setFormData({
+        email: "",
+        password: "",
+      });
+    }
   };
 
   return (
     <div className="container mx-auto">
-      <div className="text-center">
+      <div className="text-center ">
         <h1 className=" font-medium text-xl">{props.title}</h1>
-        <p>
-          {userAuth?.error && (
-            <span className="text-red-500 ">{userAuth?.error}</span>
-          )}
+        <p className="login-error hidden">
+          {error && <span className="text-red-500 ">{error}</span>}
         </p>
       </div>
 

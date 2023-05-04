@@ -5,6 +5,39 @@ const generateToken = require("../../utils/generateToken");
 const Faculty = require("../../model/Faculty");
 const Subject = require("../../model/Subject");
 const Student = require("../../model/Student");
+
+// login
+const adminLoginCtrl = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return next(new AppErr("All fields are compulsory.", 400));
+    }
+    // check if email exit
+    const adminFound = await Admin.findOne({ email });
+    if (!adminFound) {
+      return next(new AppErr("Invalid Login Credentials", 400));
+    }
+
+    // check for password validity
+    const isPasswordMatch = await bcrypt.compare(password, adminFound.password);
+    if (!isPasswordMatch) {
+      return next(new AppErr("Invalid Login Credentials", 400));
+    }
+
+    res.json({
+      status: "success",
+      loginType: adminFound.loginType,
+      fullname: adminFound.fullname,
+      id: adminFound._id,
+      token: generateToken(adminFound._id),
+    });
+  } catch (error) {
+    return next(new AppErr(error, 500));
+  }
+};
+
 // Add admin
 const addAdminCtrl = async (req, res, next) => {
   try {
@@ -50,37 +83,6 @@ const addAdminCtrl = async (req, res, next) => {
   }
 };
 
-// login
-const adminLoginCtrl = async (req, res, next) => {
-  try {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-      return next(new AppErr("All fields are compulsory.", 400));
-    }
-    // check if email exit
-    const adminFound = await Admin.findOne({ email });
-    if (!adminFound) {
-      return next(new AppErr("Invalid Login Credentials", 400));
-    }
-
-    // check for password validity
-    const isPasswordMatch = await bcrypt.compare(password, adminFound.password);
-    if (!isPasswordMatch) {
-      return next(new AppErr("Invalid Login Credentials", 400));
-    }
-
-    res.json({
-      status: "success",
-      fullname: adminFound.fullname,
-      id: adminFound._id,
-      token: generateToken(adminFound._id),
-    });
-  } catch (error) {
-    return next(new AppErr(error, 500));
-  }
-};
-
 // add faculty
 const addFacultyCtrl = async (req, res, next) => {
   try {
@@ -119,9 +121,11 @@ const addFacultyCtrl = async (req, res, next) => {
     }
 
     // check if numeric fields are number
-    if (!Number.isNaN(contactNumber) || !Number.isNaN(registrationNumber)) {
-      return next(new AppErr("Please enter valid Numeric Field.", 400));
-    }
+    // console.log(contactNumber);
+    // console.log(registrationNumber);
+    // if (!Number.isNaN(contactNumber) || !Number.isNaN(registrationNumber)) {
+    //   return next(new AppErr("Please enter valid Numeric Field.", 400));
+    // }
 
     // hash the password
     const salt = await bcrypt.genSalt(10);
@@ -260,6 +264,9 @@ const addSubjectCtrl = async (req, res, next) => {
 const adminProfileCtrl = async (req, res, next) => {
   try {
     const admin = await Admin.findById(req.user);
+    if (!admin) {
+      return next(new AppErr("Invalid User Login", 403));
+    }
     res.json({
       status: "success",
       data: admin,

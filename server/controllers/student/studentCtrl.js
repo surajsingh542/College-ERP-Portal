@@ -27,6 +27,7 @@ const studentLoginCtrl = async (req, res, next) => {
 
     res.json({
       status: "success",
+      loginType: studentFound.loginType,
       fullname: studentFound.fullname,
       id: studentFound._id,
       token: generateToken(studentFound._id),

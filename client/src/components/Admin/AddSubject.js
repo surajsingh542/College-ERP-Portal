@@ -1,13 +1,16 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { adminContext } from "../context/AdminContext/AdminContext";
 
 const AddSubject = () => {
-  const { addSubjectAction, error } = useContext(adminContext);
+  const { addSubjectAction, fetchSubFacultiesAction, faculties, error } =
+    useContext(adminContext);
 
   const [formData, setFormData] = useState({
     subjectName: "",
     subjectCode: "",
     department: "",
+    assignedTo: "",
+    semester: "",
   });
 
   const onChangeHandler = (e) => {
@@ -17,11 +20,17 @@ const AddSubject = () => {
     });
   };
 
+  useEffect(() => {
+    fetchSubFacultiesAction(formData);
+  }, [formData?.department]);
+
   const submitHandler = (e) => {
     e.preventDefault();
     addSubjectAction(formData);
 
     setFormData({
+      assignedTo: "",
+      semester: "",
       subjectName: "",
       subjectCode: "",
       department: "",
@@ -42,7 +51,7 @@ const AddSubject = () => {
         </>
       ) : (
         <>
-          <div class="msg__status hidden mt-12 mx-auto max-w-fit bg-green-100 text-center border-green-400 text-green-700 px-7 py-2 rounded-md"></div>
+          <div className="sub_msg__status hidden mt-12 mx-auto max-w-fit bg-green-100 text-center border-green-400 text-green-700 px-7 py-2 rounded-md"></div>
           <form action="" onSubmit={submitHandler}>
             <div className="grid gap-4 max-w-md mt-8 px-8 mx-auto grid-cols-1  md:max-w-xl ">
               <div>
@@ -64,6 +73,20 @@ const AddSubject = () => {
                   name="subjectCode"
                   onChange={onChangeHandler}
                   value={formData.subjectCode}
+                  className="appearance-none block w-full p-2 my-3 leading-3 text-coolGray-900 border border-coolGray-200 rounded-md  placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                />
+              </div>
+              <div>
+                <label for="semester">Associated Semester</label>
+                <input
+                  required={true}
+                  type="number"
+                  min={1}
+                  max={10}
+                  name="semester"
+                  id="semester"
+                  onChange={onChangeHandler}
+                  value={formData.semester}
                   className="appearance-none block w-full p-2 my-3 leading-3 text-coolGray-900 border border-coolGray-200 rounded-md  placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
                 />
               </div>
@@ -94,6 +117,31 @@ const AddSubject = () => {
                     Electrical Engineering
                   </option>
                   <option value="Civil Engineering">Civil Engineering</option>
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="assignedFaculty">Assigned Faculty</label>
+                <select
+                  required={true}
+                  name="assignedTo"
+                  id="assignedFaculty"
+                  onChange={onChangeHandler}
+                  value={formData.assignedTo}
+                  className="block w-full p-2 my-3 leading-3 text-coolGray-900 border border-coolGray-200 rounded-md  placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                >
+                  <option value="" selected disabled hidden>
+                    Select assigned Faculty
+                  </option>
+                  {/* loop */}
+                  {faculties.map((faculty) => {
+                    console.log("Loop", faculty);
+                    return (
+                      <option value={faculty._id} key={faculty._id}>
+                        {faculty.fullname}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
 
