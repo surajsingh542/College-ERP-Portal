@@ -6,13 +6,16 @@ import reportWebVitals from "./reportWebVitals";
 import AuthContextProvider from "./components/context/AuthContext/AuthContext";
 import { AdminContextProvider } from "./components/context/AdminContext/AdminContext";
 import { FacultyContextProvider } from "./components/context/FacultyContext/FacultyContext";
+import { StudentContextProvider } from "./components/context/StudentContext/StudentContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <AuthContextProvider>
     <AdminContextProvider>
       <FacultyContextProvider>
-        <App />
+        <StudentContextProvider>
+          <App />
+        </StudentContextProvider>
       </FacultyContextProvider>
     </AdminContextProvider>
   </AuthContextProvider>

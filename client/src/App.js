@@ -14,7 +14,8 @@ import FetchSubjects from "./components/Admin/FetchSubjects";
 import FacultyProfile from "./components/Faculty/FacultyProfile";
 import Attendance from "./components/Faculty/Attendance";
 import Marks from "./components/Faculty/Marks";
-
+import StudentProfile from "./components/Student/StudentProfile";
+import FetchMarks from "./components/Student/FetchMarks";
 function App() {
   return (
     <BrowserRouter>
@@ -36,6 +37,9 @@ function App() {
         <Route path="/faculty-profile" element={<FacultyProfile />} />
         <Route path="/mark-attendance" element={<Attendance />} />
         <Route path="/add-marks" element={<Marks />} />
+        {/* Student Routes */}
+        <Route path="/student-profile" element={<StudentProfile />} />
+        <Route path="/get-marks" element={<FetchMarks />} />
       </Routes>
     </BrowserRouter>
   );

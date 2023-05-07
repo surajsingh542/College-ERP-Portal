@@ -94,7 +94,12 @@ const getStudentProfileCtrl = async (req, res) => {
 // get marks
 const getMarksCtrl = async (req, res) => {
   try {
-    const marks = await Student.findById(req.user).populate("marks");
+    const marks = await Student.findById(req.user).populate({
+      path: "marks",
+      populate: {
+        path: "subject",
+      },
+    });
     res.json({
       status: "success",
       data: marks,

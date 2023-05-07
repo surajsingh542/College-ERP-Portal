@@ -215,7 +215,7 @@ const Marks = () => {
                 className="inline-block py-3 my-3 px-7 w-7/12 text-base text-green-50 font-medium text-center leading-6 bg-cyan-500 hover:bg-cyan-600 focus:ring-2  rounded-md shadow-sm"
                 type="submit"
               >
-                Add Subject
+                Add Marks
               </button>
             </div>
           </form>
