@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 import Navbar from "./components/Navbar/Navbar";
 import Login from "./components/Forms/Login";
 import Home from "./components/Home/Home";
@@ -14,6 +15,25 @@ import FetchSubjects from "./components/Admin/FetchSubjects";
 import FacultyProfile from "./components/Faculty/FacultyProfile";
 import Attendance from "./components/Faculty/Attendance";
 import Marks from "./components/Faculty/Marks";
+import ViewAttendance from "./components/Faculty/getAttendance";
+import StudentProfile from "./components/Student/StudentProfile";
+import FetchMarks from "./components/Student/FetchMarks";
+import NotFound from "./components/NotFound";
+
+if (window.localStorage.userAuth) {
+  const auth = JSON.parse(localStorage.userAuth);
+  console.log(auth);
+  const decoded = jwt_decode(auth.token);
+  console.log("Not Removed", decoded);
+
+  // Check for expired token
+  const currentTime = Date.now() / 1000;
+  if (decoded.exp < currentTime) {
+    console.log("Removed", decoded);
+    window.localStorage.removeItem("userAuth");
+    window.location.href = "/";
+  }
+}
 
 function App() {
   return (
@@ -36,6 +56,12 @@ function App() {
         <Route path="/faculty-profile" element={<FacultyProfile />} />
         <Route path="/mark-attendance" element={<Attendance />} />
         <Route path="/add-marks" element={<Marks />} />
+        <Route path="/view-attendance" element={<ViewAttendance />} />
+        {/* Student Routes */}
+        <Route path="/student-profile" element={<StudentProfile />} />
+        <Route path="/get-marks" element={<FetchMarks />} />
+        {/* 404 Not Found */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

@@ -198,15 +198,15 @@ const addStudentCtrl = async (req, res, next) => {
     }
 
     // check if numeric fields are number
-    if (
-      !Number.isNaN(contactNumber) ||
-      !Number.isNaN(registrationNumber) ||
-      !Number.isNaN(aadharCard) ||
-      !Number.isNaN(semester) ||
-      !Number.isNaN(batch)
-    ) {
-      return next(new AppErr("Please enter valid Numeric Field.", 400));
-    }
+    // if (
+    //   !Number.isNaN(contactNumber) ||
+    //   !Number.isNaN(registrationNumber) ||
+    //   !Number.isNaN(aadharCard) ||
+    //   !Number.isNaN(semester) ||
+    //   !Number.isNaN(batch)
+    // ) {
+    //   return next(new AppErr("Please enter valid Numeric Field.", 400));
+    // }
 
     // hash the password
     const salt = await bcrypt.genSalt(10);

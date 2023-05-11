@@ -9,6 +9,8 @@ import {
   FETCH_STUDENT_SUCCESS,
   FETCH_STUDENT_FAIL,
   MARK_ATTENDANCE_FAIL,
+  FETCH_ATTENDANCE_FAIL,
+  FETCH_ATTENDANCE_SUCCESS,
   UPLOAD_MARKS_FAIL,
 } from "./facultyActionTypes";
 
@@ -17,6 +19,7 @@ export const FacultyContext = createContext();
 // INITIAL_STATE
 const INITIAL_STATE = {
   assignedSubjects: [],
+  presentDays: [],
   students: [],
   error: null,
 };
@@ -42,6 +45,19 @@ const reducer = (state, action) => {
         ...state,
         students: payload,
         error: null,
+      };
+    case FETCH_ATTENDANCE_SUCCESS:
+      console.log("ATTENDANCE PAYLOAD", payload);
+      return {
+        ...state,
+        presentDays: payload,
+        error: null,
+      };
+    case FETCH_ATTENDANCE_FAIL:
+      return {
+        ...state,
+        presentDays: [],
+        error: payload,
       };
     case FETCH_STUDENT_FAIL:
       return {
@@ -228,6 +244,35 @@ export const FacultyContextProvider = ({ children }) => {
     }
   };
 
+  // Get Attendance
+  const getAttendanceAction = async (formData) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userAuth?.token}`,
+      },
+    };
+    try {
+      console.log("Get Attendance Form Data", formData);
+      const res = await axios.post(
+        `${API_URL_FACULTY}/fetch-attendance`,
+        formData,
+        config
+      );
+      if (res?.data?.status === "success") {
+        dispatch({
+          type: FETCH_ATTENDANCE_SUCCESS,
+          payload: res.data.data.attendedOn,
+        });
+      }
+    } catch (error) {
+      dispatch({
+        type: FETCH_ATTENDANCE_FAIL,
+        payload: error?.response?.data?.message,
+      });
+    }
+  };
+
   return (
     <FacultyContext.Provider
       value={{
@@ -235,6 +280,8 @@ export const FacultyContextProvider = ({ children }) => {
         students: state?.students,
         markAttendanceAction,
         addMarksAction,
+        getAttendanceAction,
+        attendedOn: state?.presentDays,
         assignedSubjectsAction,
         fetchStudentAction,
       }}

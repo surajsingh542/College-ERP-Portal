@@ -223,6 +223,32 @@ const markAttendanceCtrl = async (req, res) => {
   }
 };
 
+// get attendance
+const fetchAttendanceCtrl = async (req, res) => {
+  try {
+    const { registrationNumber, subjectCode } = req.body;
+    console.log(registrationNumber);
+    console.log(subjectCode);
+    const subjectFound = await Subject.findOne({ subjectCode: subjectCode });
+    const studentFound = await Student.findOne({
+      registrationNumber: registrationNumber,
+    });
+    // subject not found error
+
+    const attendanceFound = await Attendance.findOne({
+      userID: studentFound._id,
+      subject: subjectFound._id,
+    });
+    console.log("Attenance", attendanceFound);
+    res.json({
+      status: "success",
+      data: attendanceFound,
+    });
+  } catch (error) {
+    res.json(error);
+  }
+};
+
 // upload marks
 const uploadMarksCtrl = async (req, res, next) => {
   try {
@@ -331,6 +357,7 @@ module.exports = {
   updateProfileCtrl,
   uploadProfilePhotoCtrl,
   markAttendanceCtrl,
+  fetchAttendanceCtrl,
   uploadMarksCtrl,
   updatePasswordCtrl,
 };
