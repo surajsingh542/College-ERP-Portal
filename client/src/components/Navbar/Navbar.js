@@ -25,7 +25,7 @@ export default function Navbar() {
                     )}
                   </Disclosure.Button>
                 </div>
-                <div className="flex flex-shrink-0 items-center">
+                {/* <div className="flex flex-shrink-0 items-center">
                   <img
                     className="block h-8 w-auto lg:hidden"
                     src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
@@ -36,7 +36,7 @@ export default function Navbar() {
                     src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
                     alt="Your Company"
                   />
-                </div>
+                </div> */}
                 <div className="hidden md:ml-6 md:flex md:items-center md:space-x-4">
                   {!userAuth?.token && (
                     <Link
@@ -109,6 +109,30 @@ export default function Navbar() {
                         className="text-gray-300 hover:bg-gray-700 capitalize hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                       >
                         Mark Attendance
+                      </Link>
+                      <Link
+                        to="/add-marks"
+                        className="text-gray-300 hover:bg-gray-700 capitalize hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                      >
+                        Upload Marks
+                      </Link>
+                      <Link
+                        to="/view-attendance"
+                        className="text-gray-300 hover:bg-gray-700 capitalize hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                      >
+                        View Attendance
+                      </Link>
+                    </>
+                  )}
+
+                  {/* Student Navigation */}
+                  {userAuth?.token && userAuth?.loginType === "student" && (
+                    <>
+                      <Link
+                        to="/get-marks"
+                        className="text-gray-300 hover:bg-gray-700 capitalize hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                      >
+                        View Marks
                       </Link>
                     </>
                   )}
@@ -243,6 +267,24 @@ export default function Navbar() {
                     className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                   >
                     Upload Marks
+                  </Link>
+                  <Link
+                    to="/view-attendance"
+                    className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                  >
+                    View Attendance
+                  </Link>
+                </>
+              )}
+
+              {/* Student Navigation */}
+              {userAuth?.token && userAuth?.loginType === "student" && (
+                <>
+                  <Link
+                    to="/get-marks"
+                    className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                  >
+                    View Marks
                   </Link>
                 </>
               )}

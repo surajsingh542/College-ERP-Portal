@@ -11,6 +11,7 @@ const {
   uploadMarksCtrl,
   updatePasswordCtrl,
   getStudentsCtrl,
+  fetchAttendanceCtrl,
 } = require("../../controllers/faculty/facultyCtrl");
 const isLogin = require("../../middlewares/isLogin");
 const facultyRoutes = express.Router();
@@ -45,6 +46,9 @@ facultyRoutes.put(
 
 // POST/api/v1/faculty/attendance
 facultyRoutes.post("/attendance", isLogin, markAttendanceCtrl);
+
+// POST/api/v1/faculty/attendance
+facultyRoutes.post("/fetch-attendance", isLogin, fetchAttendanceCtrl);
 
 // POST/api/v1/faculty/marks
 facultyRoutes.post("/marks", isLogin, uploadMarksCtrl);
